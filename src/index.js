@@ -24,3 +24,17 @@ async function getPrices() {
   monitorTransfers(prices); // передай цены в монитор
   await checkUnlocks(TOKENS.find(t => t.symbol === 'STRK'), prices);
 })();
+
+async function runAgentLoop() {
+  while (true) {
+    try {
+      await main(); // твоя логика мониторинга
+    } catch (err) {
+      console.error('Ошибка агента:', err.message);
+    }
+
+    await new Promise(r => setTimeout(r, 60000)); // повторять каждые 60 сек
+  }
+}
+
+runAgentLoop();
